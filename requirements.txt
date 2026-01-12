@@ -3,5 +3,5 @@ opencv-python
 numpy>=1.26.0
 Pillow>=10.0.0
 python-dotenv
-mediapipe
+mediapipe==0.10.9
 

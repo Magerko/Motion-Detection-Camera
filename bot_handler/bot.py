@@ -117,16 +117,23 @@ async def cq_toggle_monitoring(callback: CallbackQuery):
 @dp.callback_query(F.data.startswith("set_mode_"))
 async def cq_set_mode(callback: CallbackQuery):
     new_mode = callback.data.split("_")[-1]
-    if new_mode in ["photo", "video"]:
-        bot_state.current_mode = new_mode
-        logger.info(f"Режим изменен на: {new_mode}")
+    if new_mode not in ["photo", "video"]:
+        await callback.answer()
+        return
+
+    if bot_state.current_mode == new_mode:
+        await callback.answer(f"Уже в режиме {new_mode}")
+        return
+
+    bot_state.current_mode = new_mode
+    logger.info(f"Режим изменен на: {new_mode}")
 
     await callback.message.edit_text(
         f"Состояние мониторинга: {hbold('ВКЛЮЧЕН') if bot_state.monitoring_active else hbold('ВЫКЛЮЧЕН')}\n"
         f"Текущий режим: {hbold(bot_state.current_mode.upper())}",
         reply_markup=get_main_keyboard()
     )
-    await callback.answer(f"Режим установлен на: {new_mode}")
+    await callback.answer(f"Режим: {new_mode}")
 
 
 async def send_alert_to_user(user_id: int, message_text: str, file_path: str = None, file_type: str = "photo"):
