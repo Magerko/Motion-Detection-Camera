@@ -1,0 +1,7 @@
+aiogram
+opencv-python
+numpy>=1.26.0
+Pillow>=10.0.0
+python-dotenv
+mediapipe
+
